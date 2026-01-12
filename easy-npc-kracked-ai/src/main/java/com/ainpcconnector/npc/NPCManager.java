@@ -8,7 +8,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.Hand;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
