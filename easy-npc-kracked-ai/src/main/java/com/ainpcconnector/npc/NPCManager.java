@@ -1,6 +1,7 @@
 package com.ainpcconnector.npc;
 
 import com.ainpcconnector.AINpcConnectorMod;
+import com.ainpcconnector.behavior.AutonomousController;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.Entity;
@@ -19,17 +20,26 @@ import java.util.UUID;
 
 /**
  * Manages detection, tracking, and lifecycle of NPCs.
+ * Integrates autonomous behavior for AI-controlled NPCs.
  */
 public class NPCManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NPCManager.class);
 
     private final NPCRegistry registry;
+    private AutonomousController autonomousController;
 
     private int tickCounter = 0;
 
     public NPCManager() {
         this.registry = NPCRegistry.getInstance();
+    }
+
+    /**
+     * Set the autonomous controller.
+     */
+    public void setAutonomousController(AutonomousController controller) {
+        this.autonomousController = controller;
     }
 
     /**
@@ -203,7 +213,7 @@ public class NPCManager {
 
         // Process AI behavior for all enabled NPCs
         for (NPCProfile profile : registry.getAllProfiles()) {
-            if (profile.isAiEnabled() && profile.getStatus() == NPCProfile.NPCStatus.IDLE) {
+            if (profile.isAiEnabled()) {
                 // Find the entity and its world in our pre-collected maps
                 Entity entity = entityMap.get(profile.getEntityUuid());
                 ServerWorld world = worldMap.get(profile.getEntityUuid());
@@ -213,10 +223,15 @@ public class NPCManager {
                     profile.setLastKnownPosition(
                             new net.minecraft.util.math.Vec3d(entity.getX(), entity.getY(), entity.getZ()));
 
-                    // Process AI behavior
+                    // Process legacy AI behavior (looking at players)
                     AINpcConnectorMod.getAIController().ifPresent(controller -> {
                         controller.processTick(world, entity, profile);
                     });
+
+                    // Process autonomous behavior (movement, socializing, etc.)
+                    if (autonomousController != null) {
+                        autonomousController.processAutonomousBehavior(world, entity, profile);
+                    }
                 }
             }
         }

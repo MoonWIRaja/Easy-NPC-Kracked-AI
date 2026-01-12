@@ -1,6 +1,7 @@
 package com.ainpcconnector;
 
 import com.ainpcconnector.behavior.AIController;
+import com.ainpcconnector.behavior.AutonomousController;
 import com.ainpcconnector.config.ConfigManager;
 import com.ainpcconnector.npc.NPCManager;
 import com.ainpcconnector.web.WebServer;
@@ -16,12 +17,17 @@ import java.util.Optional;
 /**
  * Main mod class for Easy NPC kracked AI.
  * Connects Easy NPCs with AI capabilities - Auto-thinking, autonomous NPCs.
+ * Features:
+ * - Autonomous movement and navigation
+ * - NPC-to-NPC communication
+ * - Dynamic personality evolution
+ * - Human-like behavior patterns
  */
 public class AINpcConnectorMod implements ModInitializer {
 
     public static final String MOD_ID = "easynpcai";
     public static final String MOD_NAME = "Easy NPC kracked AI";
-    public static final String MOD_VERSION = "1.0.0";
+    public static final String MOD_VERSION = "1.1.0";
 
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
@@ -29,6 +35,7 @@ public class AINpcConnectorMod implements ModInitializer {
     private static ConfigManager configManager;
     private static NPCManager npcManager;
     private static AIController aiController;
+    private static AutonomousController autonomousController;
     private static WebServer webServer;
 
     @Override
@@ -50,6 +57,11 @@ public class AINpcConnectorMod implements ModInitializer {
         // Initialize AI controller
         aiController = new AIController(configManager);
         LOGGER.info("[Easy NPC kracked AI] AI Controller initialized");
+
+        // Initialize autonomous controller
+        autonomousController = new AutonomousController(configManager);
+        npcManager.setAutonomousController(autonomousController);
+        LOGGER.info("[Easy NPC kracked AI] Autonomous Controller initialized - NPCs will now move and think autonomously");
 
         // Register server lifecycle events
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
@@ -84,6 +96,11 @@ public class AINpcConnectorMod implements ModInitializer {
                 aiController.shutdown();
             }
 
+            // Shutdown autonomous controller
+            if (autonomousController != null) {
+                autonomousController.shutdown();
+            }
+
             LOGGER.info("[Easy NPC kracked AI] Mod shutdown complete");
         });
 
@@ -102,6 +119,10 @@ public class AINpcConnectorMod implements ModInitializer {
 
     public static Optional<AIController> getAIController() {
         return Optional.ofNullable(aiController);
+    }
+
+    public static Optional<AutonomousController> getAutonomousController() {
+        return Optional.ofNullable(autonomousController);
     }
 
     public static Optional<WebServer> getWebServer() {

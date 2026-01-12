@@ -82,13 +82,13 @@ public class AIController {
         }
 
         if (!profile.isAiEnabled()) {
-            player.sendMessage(Text.literal("This NPC is not AI-enabled. Configure it in the web interface."));
+            player.sendMessage(Text.literal("This NPC is not AI-enabled. Configure it in the web interface."), false);
             return;
         }
 
         // Check if there's already an active request
         if (activeRequests.containsKey(entity.getUuid())) {
-            player.sendMessage(Text.literal("Please wait, the NPC is thinking..."));
+            player.sendMessage(Text.literal("Please wait, the NPC is thinking..."), false);
             return;
         }
 
@@ -98,7 +98,7 @@ public class AIController {
         // Get AI provider
         AIProvider provider = AIProviderFactory.createForNPC(profile, configManager.getConfig());
         if (!provider.isConfigured()) {
-            player.sendMessage(Text.literal("AI provider is not configured. Please set API key in the web interface."));
+            player.sendMessage(Text.literal("AI provider is not configured. Please set API key in the web interface."), false);
             profile.setStatus(NPCProfile.NPCStatus.IDLE);
             return;
         }
@@ -125,7 +125,7 @@ public class AIController {
             activeRequests.remove(finalEntity.getUuid());
 
             // Send response to player
-            player.sendMessage(Text.literal("<" + finalProfile.getEntityName() + "> " + response));
+            player.sendMessage(Text.literal("<" + finalProfile.getEntityName() + "> " + response), false);
 
             // Update conversation history
             finalProfile.addToConversationHistory("Player: " + finalMessage);
@@ -146,7 +146,7 @@ public class AIController {
         }).exceptionally(ex -> {
             activeRequests.remove(finalEntity.getUuid());
             LOGGER.error("[Easy NPC kracked AI] AI request failed for NPC {}", finalProfile.getEntityName(), ex);
-            player.sendMessage(Text.literal("The NPC couldn't respond right now."));
+            player.sendMessage(Text.literal("The NPC couldn't respond right now."), false);
             finalProfile.setStatus(NPCProfile.NPCStatus.IDLE);
             return null;
         });
