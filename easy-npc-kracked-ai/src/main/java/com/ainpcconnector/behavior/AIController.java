@@ -36,8 +36,6 @@ public class AIController {
     private final ExecutorService executorService;
     private final Map<UUID, CompletableFuture<String>> activeRequests = new ConcurrentHashMap<>();
 
-    private long lastTickTime = 0;
-
     public AIController(ConfigManager configManager) {
         this.configManager = configManager;
         this.npcRegistry = NPCRegistry.getInstance();
