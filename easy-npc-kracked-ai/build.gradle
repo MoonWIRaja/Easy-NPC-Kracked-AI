@@ -45,8 +45,8 @@ dependencies {
     implementation('org.jetbrains.kotlin:kotlin-reflect:1.9.25')
     include('org.jetbrains.kotlin:kotlin-reflect:1.9.25')
 
-    implementation('org.slf4j:slf4j-simple:2.0.16')
-    include('org.slf4j:slf4j-simple:2.0.16')
+    // Note: slf4j-simple removed - Minecraft/Fabric already provides SLF4J binding via Log4j
+    // Including it causes "Class path contains multiple SLF4J providers" warning
 
     // OpenAI SDK
     implementation('com.openai:openai-java:0.27.0')
@@ -89,6 +89,38 @@ dependencies {
 
     implementation('org.eclipse.jetty:jetty-util:11.0.24')
     include('org.eclipse.jetty:jetty-util:11.0.24')
+
+    implementation('org.eclipse.jetty:jetty-servlet:11.0.24')
+    include('org.eclipse.jetty:jetty-servlet:11.0.24')
+
+    implementation('org.eclipse.jetty:jetty-webapp:11.0.24')
+    include('org.eclipse.jetty:jetty-webapp:11.0.24')
+
+    implementation('org.eclipse.jetty:jetty-security:11.0.24')
+    include('org.eclipse.jetty:jetty-security:11.0.24')
+
+    implementation('org.eclipse.jetty:jetty-xml:11.0.24')
+    include('org.eclipse.jetty:jetty-xml:11.0.24')
+
+    // Jetty WebSocket support (Required by Javalin 5)
+    implementation('org.eclipse.jetty.websocket:websocket-jetty-server:11.0.24')
+    include('org.eclipse.jetty.websocket:websocket-jetty-server:11.0.24')
+
+    implementation('org.eclipse.jetty.websocket:websocket-jetty-api:11.0.24')
+    include('org.eclipse.jetty.websocket:websocket-jetty-api:11.0.24')
+
+    implementation('org.eclipse.jetty.websocket:websocket-jetty-common:11.0.24')
+    include('org.eclipse.jetty.websocket:websocket-jetty-common:11.0.24')
+
+    implementation('org.eclipse.jetty.websocket:websocket-core-server:11.0.24')
+    include('org.eclipse.jetty.websocket:websocket-core-server:11.0.24')
+
+    implementation('org.eclipse.jetty.websocket:websocket-core-common:11.0.24')
+    include('org.eclipse.jetty.websocket:websocket-core-common:11.0.24')
+
+    // Jakarta Servlet API (required by Jetty 11.x)
+    implementation('jakarta.servlet:jakarta.servlet-api:5.0.0')
+    include('jakarta.servlet:jakarta.servlet-api:5.0.0')
 
     // Gson for JSON serialization
     implementation('com.google.code.gson:gson:2.11.0')
