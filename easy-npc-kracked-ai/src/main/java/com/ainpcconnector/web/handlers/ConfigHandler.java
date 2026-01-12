@@ -27,19 +27,21 @@ public class ConfigHandler {
         ModConfig config = configManager.getConfig();
 
         // Return config with sensitive data masked
+        // Use fallbacks for potential nulls because Map.of() does not allow null values
         ctx.json(Map.of(
                 "webServer", Map.of(
                         "enabled", config.getWebServer().isEnabled(),
-                        "ip", config.getWebServer().getIp(),
+                        "ip", config.getWebServer().getIp() != null ? config.getWebServer().getIp() : "0.0.0.0",
                         "port", config.getWebServer().getPort()),
                 "ai", Map.of(
-                        "defaultProviderId", config.getAi().getDefaultProviderId(),
+                        "defaultProviderId",
+                        config.getAi().getDefaultProviderId() != null ? config.getAi().getDefaultProviderId() : "",
                         "providers", config.getAiProviders().stream()
                                 .map(p -> Map.of(
-                                        "id", p.getId(),
-                                        "name", p.getName(),
-                                        "endpoint", p.getEndpoint(),
-                                        "model", p.getModel(),
+                                        "id", p.getId() != null ? p.getId() : "",
+                                        "name", p.getName() != null ? p.getName() : "Unknown",
+                                        "endpoint", p.getEndpoint() != null ? p.getEndpoint() : "",
+                                        "model", p.getModel() != null ? p.getModel() : "",
                                         "hasApiKey", p.getApiKey() != null && !p.getApiKey().isEmpty()))
                                 .toList()),
                 "npc", Map.of(
@@ -47,7 +49,8 @@ public class ConfigHandler {
                         "personalityEvolutionRate", config.getNpc().getPersonalityEvolutionRate()),
                 "voice", Map.of(
                         "enabled", config.getVoice().isEnabled(),
-                        "ttsProvider", config.getVoice().getTtsProvider())));
+                        "ttsProvider",
+                        config.getVoice().getTtsProvider() != null ? config.getVoice().getTtsProvider() : "none")));
     }
 
     /**

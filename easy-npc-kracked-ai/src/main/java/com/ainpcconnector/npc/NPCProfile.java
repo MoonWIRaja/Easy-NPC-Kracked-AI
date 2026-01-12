@@ -60,8 +60,10 @@ public class NPCProfile {
         this(entity.getUuid(),
                 entity.getName().getString(),
                 entity.getType().toString());
-        this.lastKnownPosition = entity.getPos();
-        this.homePosition = entity.getBlockPos();
+        // Using direct coordinate access which is more stable across versions than
+        // getPos()
+        this.lastKnownPosition = new Vec3d(entity.getX(), entity.getY(), entity.getZ());
+        this.homePosition = new BlockPos((int) entity.getX(), (int) entity.getY(), (int) entity.getZ());
     }
 
     // Getters and Setters
