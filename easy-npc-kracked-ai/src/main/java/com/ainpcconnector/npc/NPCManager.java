@@ -74,7 +74,10 @@ public class NPCManager {
         // Chat listener for proximity-based responses
         ServerMessageEvents.CHAT_MESSAGE.register((message, sender, params) -> {
             net.minecraft.server.MinecraftServer server = sender.getServer();
-            Vec3d senderPos = sender.getPos();
+            ServerWorld senderWorld = sender.getServerWorld();
+            double sx = sender.getX();
+            double sy = sender.getY();
+            double sz = sender.getZ();
 
             // Get content string
             String content = message.getContent().getString();
@@ -83,12 +86,19 @@ public class NPCManager {
             for (NPCProfile profile : registry.getAllProfiles()) {
                 if (profile.isAiEnabled()) {
                     Entity npcEntity = findEntityInLoadedWorlds(server, profile.getEntityUuid());
-                    if (npcEntity != null && npcEntity.getWorld() == sender.getWorld()) {
-                        double dist = npcEntity.getPos().distanceTo(senderPos);
-                        if (dist < 10.0) { // 10 blocks radius
-                            AINpcConnectorMod.getAIController().ifPresent(controller -> {
-                                controller.handlePlayerInteraction(sender, npcEntity, content);
-                            });
+                    if (npcEntity != null) {
+                        // Check world equivalence using registry key to be extra safe
+                        if (npcEntity.getWorld().getRegistryKey().equals(senderWorld.getRegistryKey())) {
+                            double dx = npcEntity.getX() - sx;
+                            double dy = npcEntity.getY() - sy;
+                            double dz = npcEntity.getZ() - sz;
+                            double distSq = dx * dx + dy * dy + dz * dz;
+
+                            if (distSq < 100.0) { // 10 blocks radius (10^2 = 100)
+                                AINpcConnectorMod.getAIController().ifPresent(controller -> {
+                                    controller.handlePlayerInteraction(sender, npcEntity, content);
+                                });
+                            }
                         }
                     }
                 }
@@ -180,13 +190,15 @@ public class NPCManager {
      * Called every server tick for NPC behavior processing.
      */
     private void onServerTick(net.minecraft.server.MinecraftServer server) {
-        // Collect all Easy NPC entities currently loaded across all worlds to avoid
-        // crashing version-sensitive getEntity(UUID) calls
+        // Collect all Easy NPC entities and their worlds to avoid crashes
         java.util.Map<UUID, Entity> entityMap = new java.util.HashMap<>();
+        java.util.Map<UUID, ServerWorld> worldMap = new java.util.HashMap<>();
+
         for (ServerWorld world : server.getWorlds()) {
             for (Entity entity : world.iterateEntities()) {
                 if (isEasyNPC(entity)) {
                     entityMap.put(entity.getUuid(), entity);
+                    worldMap.put(entity.getUuid(), world);
                 }
             }
         }
@@ -194,17 +206,18 @@ public class NPCManager {
         // Process AI behavior for all enabled NPCs
         for (NPCProfile profile : registry.getAllProfiles()) {
             if (profile.isAiEnabled() && profile.getStatus() == NPCProfile.NPCStatus.IDLE) {
-                // Find the entity in our pre-collected map
+                // Find the entity and its world in our pre-collected maps
                 Entity entity = entityMap.get(profile.getEntityUuid());
+                ServerWorld world = worldMap.get(profile.getEntityUuid());
 
-                if (entity != null && entity.isAlive()) {
+                if (entity != null && entity.isAlive() && world != null) {
                     // Update position using stable coordinate access
                     profile.setLastKnownPosition(
                             new net.minecraft.util.math.Vec3d(entity.getX(), entity.getY(), entity.getZ()));
 
                     // Process AI behavior
                     AINpcConnectorMod.getAIController().ifPresent(controller -> {
-                        controller.processTick(entity, profile);
+                        controller.processTick(world, entity, profile);
                     });
                 }
             }

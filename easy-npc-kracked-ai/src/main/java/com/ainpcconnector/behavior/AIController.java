@@ -153,14 +153,14 @@ public class AIController {
         });
     }
 
-    public void processTick(Entity entity, NPCProfile profile) {
+    public void processTick(net.minecraft.server.world.ServerWorld world, Entity entity, NPCProfile profile) {
         if (!profile.isAiEnabled()) {
             return;
         }
 
         // Autonomous social behavior: Look at nearby players
         if (entity instanceof MobEntity mob) {
-            lookAtNearbyPlayers(mob);
+            lookAtNearbyPlayers(world, mob);
         }
 
         // Higher-level autonomous thinking could be added here
@@ -170,13 +170,14 @@ public class AIController {
     /**
      * Look at nearby players (social behavior).
      */
-    public void lookAtNearbyPlayers(MobEntity entity) {
+    public void lookAtNearbyPlayers(net.minecraft.server.world.ServerWorld world, MobEntity entity) {
         // Using stable coordinate access instead of version-sensitive getPos()
-        Vec3d pos = new Vec3d(entity.getX(), entity.getY(), entity.getZ());
+        double x = entity.getX();
+        double y = entity.getY();
+        double z = entity.getZ();
         double range = 16.0; // 16 blocks
 
-        Entity nearestPlayer = entity.getWorld().getClosestPlayer(
-                pos.x, pos.y, pos.z, range, false);
+        Entity nearestPlayer = world.getClosestPlayer(x, y, z, range, false);
 
         if (nearestPlayer != null && nearestPlayer instanceof ServerPlayerEntity) {
             entity.getLookControl().lookAt(nearestPlayer);
