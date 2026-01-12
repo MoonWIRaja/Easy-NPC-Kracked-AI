@@ -155,23 +155,18 @@ public class AIController {
         });
     }
 
-    /**
-     * Process AI behavior on server tick.
-     */
     public void processTick(Entity entity, NPCProfile profile) {
         if (!profile.isAiEnabled()) {
             return;
         }
 
-        // Check if it's time for AI thinking
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - lastTickTime < configManager.getConfig().getNpc().getAiThinkIntervalTicks() * 50) {
-            return;
+        // Autonomous social behavior: Look at nearby players
+        if (entity instanceof MobEntity mob) {
+            lookAtNearbyPlayers(mob);
         }
-        lastTickTime = currentTime;
 
-        // Random autonomous behavior could be added here
-        // For example: random movement, idle animations, etc.
+        // Higher-level autonomous thinking could be added here
+        // (Like random speech, pathfinding to POIs, etc.)
     }
 
     /**

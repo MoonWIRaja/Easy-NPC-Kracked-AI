@@ -7,6 +7,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.Hand;
+import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
+import net.minecraft.server.network.ServerPlayerEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +60,55 @@ public class NPCManager {
             }
         });
 
-        LOGGER.info("[Easy NPC kracked AI] NPC Manager initialized");
+        // Interaction (Right-Click) listener
+        UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+            if (hand == Hand.MAIN_HAND && !world.isClient && isEasyNPC(entity)) {
+                AINpcConnectorMod.getAIController().ifPresent(controller -> {
+                    controller.handlePlayerInteraction((ServerPlayerEntity) player, entity, "Hello!");
+                });
+                return ActionResult.SUCCESS;
+            }
+            return ActionResult.PASS;
+        });
+
+        // Chat listener for proximity-based responses
+        ServerMessageEvents.CHAT_MESSAGE.register((message, sender, params) -> {
+            net.minecraft.server.MinecraftServer server = sender.getServer();
+            Vec3d senderPos = sender.getPos();
+
+            // Get content string
+            String content = message.getContent().getString();
+
+            // Find nearby active NPCs
+            for (NPCProfile profile : registry.getAllProfiles()) {
+                if (profile.isAiEnabled()) {
+                    Entity npcEntity = findEntityInLoadedWorlds(server, profile.getEntityUuid());
+                    if (npcEntity != null && npcEntity.getWorld() == sender.getWorld()) {
+                        double dist = npcEntity.getPos().distanceTo(senderPos);
+                        if (dist < 10.0) { // 10 blocks radius
+                            AINpcConnectorMod.getAIController().ifPresent(controller -> {
+                                controller.handlePlayerInteraction(sender, npcEntity, content);
+                            });
+                        }
+                    }
+                }
+            }
+        });
+
+        LOGGER.info("[Easy NPC kracked AI] NPC Manager initialized with Interaction and Chat listeners");
+    }
+
+    /**
+     * Finds an entity in any loaded world.
+     */
+    private Entity findEntityInLoadedWorlds(net.minecraft.server.MinecraftServer server, UUID uuid) {
+        for (ServerWorld world : server.getWorlds()) {
+            for (Entity entity : world.iterateEntities()) {
+                if (entity.getUuid().equals(uuid))
+                    return entity;
+            }
+        }
+        return null;
     }
 
     /**
