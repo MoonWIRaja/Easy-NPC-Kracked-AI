@@ -88,8 +88,11 @@ public class NPCManager {
         NPCProfile profile = registry.getOrCreateProfile(entity);
 
         // Update position tracking
-        profile.setLastKnownPosition(entity.getPos());
-        profile.setHomePosition(entity.getBlockPos());
+        // Using stable coordinate access instead of version-sensitive
+        // getPos()/getBlockPos()
+        profile.setLastKnownPosition(new net.minecraft.util.math.Vec3d(entity.getX(), entity.getY(), entity.getZ()));
+        profile.setHomePosition(
+                new net.minecraft.util.math.BlockPos((int) entity.getX(), (int) entity.getY(), (int) entity.getZ()));
         profile.setWorldId(world.getRegistryKey().getValue().toString());
 
         // Fire event for other systems
@@ -121,8 +124,9 @@ public class NPCManager {
                 // Find the entity in the world
                 Entity entity = findEntity(server, profile.getEntityUuid());
                 if (entity != null && entity.isAlive()) {
-                    // Update position
-                    profile.setLastKnownPosition(entity.getPos());
+                    // Update position using stable coordinate access
+                    profile.setLastKnownPosition(
+                            new net.minecraft.util.math.Vec3d(entity.getX(), entity.getY(), entity.getZ()));
 
                     // Process AI behavior
                     AINpcConnectorMod.getAIController().ifPresent(controller -> {

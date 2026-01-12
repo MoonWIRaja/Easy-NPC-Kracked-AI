@@ -178,7 +178,8 @@ public class AIController {
      * Look at nearby players (social behavior).
      */
     public void lookAtNearbyPlayers(MobEntity entity) {
-        Vec3d pos = entity.getPos();
+        // Using stable coordinate access instead of version-sensitive getPos()
+        Vec3d pos = new Vec3d(entity.getX(), entity.getY(), entity.getZ());
         double range = 16.0; // 16 blocks
 
         Entity nearestPlayer = entity.getWorld().getClosestPlayer(
