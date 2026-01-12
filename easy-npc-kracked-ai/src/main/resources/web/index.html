@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy NPC Kracked AI | Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&family=Outfit:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Background Animation Layer -->
+        <div class="bg-noise"></div>
+        <div class="bg-grid"></div>
+
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen">
+            <div class="login-container">
+                <div class="mascot-container">
+                    <img src="/img/mascot.png" alt="NPC Mascot" class="mascot-img">
+                    <div class="isometric-shadow"></div>
+                </div>
+                <div class="login-box">
+                    <h1 class="pixel-text">Easy NPC <br><span class="accent-text">Kracked AI</span></h1>
+                    <p class="subtitle">Next-Gen Autonomous NPC Intelligence</p>
+                    <form id="login-form" onsubmit="return false;">
+                        <div class="form-group">
+                            <label for="username">Access Identity</label>
+                            <input type="text" id="username" name="username" placeholder="Username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Secure Key</label>
+                            <input type="password" id="password" name="password" placeholder="Password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-pixel">
+                            <span class="btn-hover-effect"></span>
+                            Authenticate
+                        </button>
+                        <p id="login-error" class="error"></p>
+                        <p class="hint">Initial user grants Administrative Rights.</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div id="dashboard-screen" class="screen hidden dashboard-layout">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <div class="brand-mascot">
+                        <img src="/img/mascot.png" alt="Mascot">
+                    </div>
+                    <h2 class="pixel-text small">Easy NPC<br><span>Kracked</span></h2>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <a href="#" class="sidebar-link active" data-tab="npcs">
+                        <i class="icon-npc"></i>
+                        <span>Entity Registry</span>
+                    </a>
+                    <a href="#" class="sidebar-link" data-tab="config">
+                        <i class="icon-config"></i>
+                        <span>Core Logic</span>
+                    </a>
+                    <a href="#" class="sidebar-link" data-tab="users" id="users-link">
+                        <i class="icon-users"></i>
+                        <span>Access Control</span>
+                    </a>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <div class="user-info-chip">
+                        <div class="avatar-pixel"></div>
+                        <div class="user-details">
+                            <span id="current-username" class="username">User</span>
+                            <span class="role-tag">Operator</span>
+                        </div>
+                    </div>
+                    <button id="logout-btn" class="logout-link">
+                        <i class="icon-logout"></i>
+                        <span>Shutdown</span>
+                    </button>
+                </div>
+            </aside>
+
+            <main class="main-viewport">
+                <!-- NPCs Tab -->
+                <section id="npcs-tab" class="tab active">
+                    <div class="content-container">
+                        <header class="section-header">
+                            <div class="header-left">
+                                <h2 class="pixel-text">Entity Registry</h2>
+                                <p class="section-desc">Real-time status of all active autonomous NPCs.</p>
+                            </div>
+                            <button id="refresh-npcs-btn" class="btn btn-secondary btn-pixel">
+                                <i class="icon-sync"></i>
+                                Synchronize
+                            </button>
+                        </header>
+
+                        <div id="npcs-list" class="npcs-grid">
+                            <!-- NPC cards will be inserted here -->
+                        </div>
+
+                        <div id="no-npcs" class="empty-state">
+                            <div class="empty-art">
+                                <div class="glitch-box"></div>
+                                <i class="icon-no-data"></i>
+                            </div>
+                            <h3 class="pixel-text">Matrix Disconnected</h3>
+                            <p>No active entities detected in the local neural field.</p>
+                            <p class="hint">Initialize an Easy NPC in-game to establish a link.</p>
+                            <div class="terminal-footer">System: Monitoring neural frequencies...</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Settings Tab -->
+                <section id="config-tab" class="tab">
+                    <div class="content-container">
+                        <header class="section-header">
+                            <div class="header-left">
+                                <h2 class="pixel-text">Core Logic</h2>
+                                <p class="section-desc">Calibrate global AI parameters and neural provider interfaces.
+                                </p>
+                            </div>
+                            <button id="save-config-btn" class="btn btn-primary btn-pixel">
+                                Commit Changes
+                            </button>
+                        </header>
+
+                        <div class="config-grid">
+                            <div class="config-main">
+                                <div class="config-group-card">
+                                    <div class="card-header">
+                                        <i class="icon-brain"></i>
+                                        <h3>AI Providers</h3>
+                                        <button id="add-provider-btn" class="btn btn-small btn-pixel">
+                                            <i class="icon-plus"></i> Add Provider
+                                        </button>
+                                    </div>
+
+                                    <!-- AI Providers List -->
+                                    <div id="providers-list" class="providers-list">
+                                        <!-- Provider cards will be inserted here -->
+                                    </div>
+
+                                    <div id="no-providers" class="empty-state">
+                                        <p>No AI providers configured.</p>
+                                        <p class="hint">Click "Add Provider" to add an AI service.</p>
+                                    </div>
+
+                                    <!-- Default Provider Selection -->
+                                    <div class="form-group selector-group">
+                                        <label>Default AI Provider</label>
+                                        <select id="default-provider">
+                                            <option value="">None selected</option>
+                                        </select>
+                                        <p class="hint">This provider will be used for NPCs without a specific assignment.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="config-side">
+                                <div class="config-group-card">
+                                    <div class="card-header">
+                                        <i class="icon-thought"></i>
+                                        <h3>Consciousness Drivers</h3>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Cognitive Cycle (ticks)</label>
+                                        <div class="slider-container">
+                                            <input type="range" id="ai-think-interval" min="10" max="1000" value="40">
+                                            <span class="value-display">40</span>
+                                        </div>
+                                        <p class="hint">Neural processing frequency.</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Evolutionary Coefficient</label>
+                                        <div class="slider-container">
+                                            <input type="range" id="personality-rate" min="0" max="1" step="0.001"
+                                                value="0.01">
+                                            <span class="value-display">0.01</span>
+                                        </div>
+                                        <p class="hint">Personality adaptation speed.</p>
+                                    </div>
+                                </div>
+
+                                <div class="config-group-card">
+                                    <div class="card-header">
+                                        <i class="icon-voice"></i>
+                                        <h3>Vocal Interface</h3>
+                                    </div>
+                                    <div class="form-group toggle-row">
+                                        <label>Auditory Output</label>
+                                        <label class="switch">
+                                            <input type="checkbox" id="voice-enabled">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Synthesis Engine</label>
+                                        <select id="tts-provider">
+                                            <option value="browser">Browser</option>
+                                            <option value="external">External</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="config-group-card">
+                                    <div class="card-header">
+                                        <i class="icon-network"></i>
+                                        <h3>Network Protocol</h3>
+                                    </div>
+                                    <div class="form-group toggle-row">
+                                        <label>External Interface</label>
+                                        <label class="switch">
+                                            <input type="checkbox" id="web-enabled">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Broadcast Port</label>
+                                        <input type="number" id="web-port" value="8080">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Users Tab (Admin only) -->
+                <section id="users-tab" class="tab">
+                    <div class="content-container">
+                        <header class="section-header">
+                            <div class="header-left">
+                                <h2 class="pixel-text">Access Control</h2>
+                                <p class="section-desc">Manage system operators and security clearances.</p>
+                            </div>
+                            <button id="add-user-btn" class="btn btn-primary btn-pixel">
+                                Register Operator
+                            </button>
+                        </header>
+                        <div id="users-list" class="users-data-grid">
+                            <!-- Users will be inserted here -->
+                        </div>
+
+                        <div id="no-users" class="empty-state hidden">
+                            <div class="empty-art">
+                                <div class="glitch-box"></div>
+                                <i class="icon-no-users"></i>
+                            </div>
+                            <h3 class="pixel-text">Nexus Secure</h3>
+                            <p>No external operators authenticated in the system.</p>
+                            <div class="terminal-footer">System: Waiting for secure uplink...</div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- NPC Detail Modal -->
+        <div id="npc-modal" class="modal hidden">
+            <div class="modal-layer"></div>
+            <div class="modal-content-wrapper">
+                <div class="modal-isometric-frame">
+                    <div class="modal-header">
+                        <div class="header-content">
+                            <div class="npc-avatar-preview"></div>
+                            <h3 id="modal-npc-name" class="pixel-text">NPC Designation</h3>
+                        </div>
+                        <button class="modal-close-icon">&times;</button>
+                    </div>
+                    <div class="modal-scroll-area">
+                        <div class="modal-section">
+                            <div class="switch-group">
+                                <div class="form-group switch-row">
+                                    <label>AI Consciousness</label>
+                                    <label class="switch">
+                                        <input type="checkbox" id="npc-ai-enabled">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <div class="form-group switch-row">
+                                    <label>Vocal Output</label>
+                                    <label class="switch">
+                                        <input type="checkbox" id="npc-voice-enabled">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-section">
+                            <div class="form-group">
+                                <label>Neural Interface</label>
+                                <select id="npc-provider">
+                                    <option value="DEFAULT">Mod Default</option>
+                                    <option value="OPENAI">OpenAI Matrix</option>
+                                    <option value="ANTHROPIC">Anthropic Nexus</option>
+                                    <option value="CUSTOM">Custom Matrix</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="modal-section">
+                            <div class="form-group">
+                                <label>Persona Core</label>
+                                <textarea id="npc-personality" placeholder="Define behavior patterns..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Operational Directives (System Prompt)</label>
+                                <textarea id="npc-system-prompt" rows="5"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="modal-section traits-section">
+                            <label class="section-label">Personality Coefficients</label>
+                            <div class="traits-isometric-grid">
+                                <div class="trait-node">
+                                    <label>Social</label>
+                                    <input type="range" id="trait-friendliness" min="0" max="1" step="0.1">
+                                    <span id="trait-friendliness-value" class="node-val">0.7</span>
+                                </div>
+                                <div class="trait-node">
+                                    <label>Curie</label>
+                                    <input type="range" id="trait-curiosity" min="0" max="1" step="0.1">
+                                    <span id="trait-curiosity-value" class="node-val">0.5</span>
+                                </div>
+                                <div class="trait-node">
+                                    <label>Wit</label>
+                                    <input type="range" id="trait-humor" min="0" max="1" step="0.1">
+                                    <span id="trait-humor-value" class="node-val">0.3</span>
+                                </div>
+                                <div class="trait-node">
+                                    <label>Chaos</label>
+                                    <input type="range" id="trait-aggression" min="0" max="1" step="0.1">
+                                    <span id="trait-aggression-value" class="node-val">0.1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="save-npc-btn" class="btn btn-primary btn-full btn-pixel">Commit Matrix Data</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add User Modal -->
+        <div id="user-modal" class="modal hidden">
+            <div class="modal-layer"></div>
+            <div class="modal-content-wrapper small">
+                <div class="modal-isometric-frame">
+                    <div class="modal-header">
+                        <h3 class="pixel-text small">Register Operator</h3>
+                        <button class="modal-close-icon">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Identity</label>
+                            <input type="text" id="new-username" required placeholder="User-123">
+                        </div>
+                        <div class="form-group">
+                            <label>Credential</label>
+                            <input type="password" id="new-password" required placeholder="••••••••">
+                        </div>
+                        <div class="form-group">
+                            <label>Clearance Level</label>
+                            <select id="new-user-role">
+                                <option value="USER">Standard Operator</option>
+                                <option value="ADMIN">System Architect</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="create-user-btn" class="btn btn-primary btn-full btn-pixel">Finalize
+                            Registration</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Provider Modal -->
+        <div id="provider-modal" class="modal hidden">
+            <div class="modal-layer"></div>
+            <div class="modal-content-wrapper">
+                <div class="modal-isometric-frame">
+                    <div class="modal-header">
+                        <h3 id="provider-modal-title" class="pixel-text">Add AI Provider</h3>
+                        <button class="modal-close-icon">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="provider-id">
+                        <div class="form-group">
+                            <label>Provider Name</label>
+                            <input type="text" id="provider-name" required placeholder="e.g., OpenAI GPT-4">
+                        </div>
+                        <div class="form-group">
+                            <label>API Key</label>
+                            <input type="password" id="provider-apikey" placeholder="sk-... or leave empty for no auth">
+                        </div>
+                        <div class="form-group">
+                            <label>API Endpoint</label>
+                            <input type="text" id="provider-endpoint" required
+                                placeholder="https://api.openai.com/v1">
+                            <p class="hint">OpenAI-compatible API endpoint</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Model</label>
+                            <input type="text" id="provider-model" required placeholder="gpt-4o">
+                        </div>
+                        <div class="provider-examples">
+                            <p class="section-label">Popular Examples:</p>
+                            <div class="example-chips">
+                                <button type="button" class="chip-btn" data-example="openai">OpenAI</button>
+                                <button type="button" class="chip-btn" data-example="deepseek">DeepSeek</button>
+                                <button type="button" class="chip-btn" data-example="grok">Grok</button>
+                                <button type="button" class="chip-btn" data-example="ollama">Ollama</button>
+                                <button type="button" class="chip-btn" data-example="anthropic">Anthropic</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="save-provider-btn" class="btn btn-primary btn-full btn-pixel">Save Provider</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UI Overlays -->
+        <div class="ui-overlays">
+            <div class="scanlines"></div>
+            <div class="vignette"></div>
+            <div class="ambient-glows">
+                <div class="glow-orb orb-1"></div>
+                <div class="glow-orb orb-2"></div>
+                <div class="glow-orb orb-3"></div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toast-container"></div>
+    </div>
+
+    <script src="/js/app.js"></script>
+</body>
+
+</html>

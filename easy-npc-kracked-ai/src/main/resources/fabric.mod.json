@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "easynpcai",
+  "name": "Easy NPC kracked AI",
+  "version": "${version}",
+  "description": "Connects Easy NPCs with AI capabilities - Auto-thinking, autonomous NPCs with evolving personalities",
+  "authors": [
+    "kracked"
+  ],
+  "contact": {
+    "homepage": "https://github.com/kracked/easynpc-ai",
+    "issues": "https://github.com/kracked/easynpc-ai/issues"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.ainpcconnector.AINpcConnectorMod"
+    ]
+  },
+  "mixins": [
+    "ainpcconnector.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.9",
+    "minecraft": ">=1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "easy_npc": ">=6.6.0",
+    "voicechat": ">=2.6.0"
+  }
+}
