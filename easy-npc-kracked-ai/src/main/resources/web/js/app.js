@@ -123,8 +123,12 @@ async function handleLogin(e) {
     const password = document.getElementById('password').value;
 
     try {
-        const response = await apiCall('/auth/login', {
+        // Direct fetch here to avoid the 401-auto-logout trigger in apiCall helper
+        const response = await fetch(API_BASE + '/auth/login', {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({ username, password })
         });
 
@@ -138,6 +142,7 @@ async function handleLogin(e) {
             loginError.textContent = data.error || 'Login failed';
         }
     } catch (error) {
+        console.error('Login error:', error);
         loginError.textContent = 'Connection error. Is the server running?';
     }
 }
