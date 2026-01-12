@@ -59,9 +59,8 @@ public class NPCManager {
             }
         });
 
-        // Interaction (Right-Click) listener
         UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            if (hand == Hand.MAIN_HAND && !world.isClient && isEasyNPC(entity)) {
+            if (hand == Hand.MAIN_HAND && world instanceof ServerWorld && isEasyNPC(entity)) {
                 AINpcConnectorMod.getAIController().ifPresent(controller -> {
                     controller.handlePlayerInteraction((ServerPlayerEntity) player, entity, "Hello!");
                 });
