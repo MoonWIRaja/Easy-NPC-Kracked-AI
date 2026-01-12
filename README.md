@@ -148,6 +148,21 @@ To launch Minecraft with the mod installed:
 
 The game will launch. Create a new world to start testing NPCs.
 
+### Part 3: Build & Export
+To create a distributive JAR file for your mod:
+
+**Windows:**
+```powershell
+.\gradlew.bat build
+```
+
+**Mac/Linux:**
+```bash
+./gradlew build
+```
+
+The compiled JAR will be located in: `easy-npc-kracked-ai/build/libs/`
+
 ---
 
 ## ⚙️ Configuration

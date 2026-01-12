@@ -148,6 +148,21 @@ Untuk melancarkan Minecraft dengan mod dipasang:
 
 Permainan akan bermula. Cipta dunia baru untuk mula menguji NPC.
 
+### Bahagian 3: Bina & Eksport (Build)
+Untuk menghasilkan fail JAR mod yang boleh diedarkan:
+
+**Windows:**
+```powershell
+.\gradlew.bat build
+```
+
+**Mac/Linux:**
+```bash
+./gradlew build
+```
+
+Fail JAR yang telah siap dibina boleh didapati di: `easy-npc-kracked-ai/build/libs/`
+
 ---
 
 ## ⚙️ Konfigurasi
