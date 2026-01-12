@@ -157,20 +157,6 @@ public class NPCManager {
         }
     }
 
-    /**
-     * Find an entity by UUID. (Deprecated/Internal use only - prefer pre-collected
-     * map)
-     */
-    private Entity findEntity(net.minecraft.server.MinecraftServer server, UUID uuid) {
-        for (net.minecraft.server.world.ServerWorld world : server.getWorlds()) {
-            for (Entity entity : world.iterateEntities()) {
-                if (entity.getUuid().equals(uuid)) {
-                    return entity;
-                }
-            }
-        }
-        return null;
-    }
 
     /**
      * Get the NPC registry.
