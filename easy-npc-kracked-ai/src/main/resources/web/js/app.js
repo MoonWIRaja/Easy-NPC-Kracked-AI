@@ -288,6 +288,7 @@ async function openNPCModal(uuid) {
         updateNPCProviderDropdown();
 
         document.getElementById('modal-npc-name').textContent = npc.entityName;
+        document.getElementById('npc-name-input').value = npc.entityName || '';
         document.getElementById('npc-ai-enabled').checked = npc.aiEnabled || false;
         document.getElementById('npc-voice-enabled').checked = npc.voiceEnabled || false;
         document.getElementById('npc-provider').value = npc.aiProviderId || 'DEFAULT';
@@ -327,6 +328,7 @@ async function saveNPC() {
     };
 
     const data = {
+        entityName: document.getElementById('npc-name-input').value,
         systemPrompt: document.getElementById('npc-system-prompt').value,
         personality: document.getElementById('npc-personality').value,
         aiProviderId: document.getElementById('npc-provider').value,

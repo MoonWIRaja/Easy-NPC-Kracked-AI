@@ -66,6 +66,9 @@ public class NPCHandler {
             NPCUpdateRequest request = ctx.bodyAsClass(NPCUpdateRequest.class);
 
             // Update fields
+            if (request.entityName != null) {
+                existingProfile.setEntityName(request.entityName);
+            }
             if (request.systemPrompt != null) {
                 existingProfile.setSystemPrompt(request.systemPrompt);
             }
@@ -122,6 +125,7 @@ public class NPCHandler {
     }
 
     public record NPCUpdateRequest(
+            String entityName,
             String systemPrompt,
             String personality,
             String aiProviderId,
