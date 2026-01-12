@@ -9,7 +9,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -69,8 +68,9 @@ public class NPCManager {
             }
         });
 
+        // Entity interaction callback - right-click on NPC
         UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            if (hand == Hand.MAIN_HAND && world instanceof ServerWorld && isEasyNPC(entity)) {
+            if (world instanceof ServerWorld && isEasyNPC(entity)) {
                 AINpcConnectorMod.getAIController().ifPresent(controller -> {
                     controller.handlePlayerInteraction((ServerPlayerEntity) player, entity, "Hello!");
                 });
@@ -81,8 +81,9 @@ public class NPCManager {
 
         // Chat listener for proximity-based responses
         ServerMessageEvents.CHAT_MESSAGE.register((message, sender, params) -> {
-            net.minecraft.server.MinecraftServer server = sender.getServer();
+            // Get server from player's world instead of sender.getServer() which changed in 1.21.1
             ServerWorld senderWorld = sender.getServerWorld();
+            net.minecraft.server.MinecraftServer server = senderWorld.getServer();
             double sx = sender.getX();
             double sy = sender.getY();
             double sz = sender.getZ();

@@ -27,7 +27,7 @@ public class AINpcConnectorMod implements ModInitializer {
 
     public static final String MOD_ID = "easynpcai";
     public static final String MOD_NAME = "Easy NPC kracked AI";
-    public static final String MOD_VERSION = "1.1.0";
+    public static final String MOD_VERSION = "1.2.0";
 
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
