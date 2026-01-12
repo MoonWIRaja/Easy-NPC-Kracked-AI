@@ -32,9 +32,12 @@ public class NPCProfile {
     private boolean voiceEnabled = false;
     private NPCStatus status = NPCStatus.IDLE;
 
-    // Position tracking
-    private Vec3d lastKnownPosition;
-    private BlockPos homePosition;
+    // Position tracking (ignored by JSON serializers to avoid Minecraft class
+    // errors)
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private transient net.minecraft.util.math.Vec3d lastKnownPosition;
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private transient net.minecraft.util.math.BlockPos homePosition;
     private String worldId;
 
     // Conversation history (last 10 messages)
