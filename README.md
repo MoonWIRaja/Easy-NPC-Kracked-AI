@@ -101,13 +101,13 @@ java -version
 
 ### 3. Open Dashboard
 Open your browser and navigate to:
-[http://localhost:8080](http://localhost:8080)
+[http://localhost:8081](http://localhost:8081)
 
 *(Press `Ctrl+C` in the terminal to stop)*
 
 ---
 
-## � Installation (Mod Development)
+##  Installation (Mod Development)
 
 This section is for developers who want to run the mod inside Minecraft.
 

@@ -393,42 +393,36 @@
             <div class="modal-content-wrapper">
                 <div class="modal-isometric-frame">
                     <div class="modal-header">
-                        <h3 id="provider-modal-title" class="pixel-text">Add AI Provider</h3>
+                        <div class="header-icon-box">
+                            <i class="icon-brain"></i>
+                        </div>
+                        <h3 id="provider-modal-title" class="pixel-text">AI Neural Interface</h3>
                         <button class="modal-close-icon">&times;</button>
                     </div>
-                    <div class="modal-body">
-                        <input type="hidden" id="provider-id">
-                        <div class="form-group">
-                            <label>Provider Name</label>
-                            <input type="text" id="provider-name" required placeholder="e.g., OpenAI GPT-4">
-                        </div>
-                        <div class="form-group">
-                            <label>API Key</label>
-                            <input type="password" id="provider-apikey" placeholder="sk-... or leave empty for no auth">
-                        </div>
-                        <div class="form-group">
-                            <label>API Endpoint</label>
-                            <input type="text" id="provider-endpoint" required
-                                placeholder="https://api.openai.com/v1">
-                            <p class="hint">OpenAI-compatible API endpoint</p>
-                        </div>
-                        <div class="form-group">
-                            <label>Model</label>
-                            <input type="text" id="provider-model" required placeholder="gpt-4o">
-                        </div>
-                        <div class="provider-examples">
-                            <p class="section-label">Popular Examples:</p>
-                            <div class="example-chips">
-                                <button type="button" class="chip-btn" data-example="openai">OpenAI</button>
-                                <button type="button" class="chip-btn" data-example="deepseek">DeepSeek</button>
-                                <button type="button" class="chip-btn" data-example="grok">Grok</button>
-                                <button type="button" class="chip-btn" data-example="ollama">Ollama</button>
-                                <button type="button" class="chip-btn" data-example="anthropic">Anthropic</button>
+                    <div class="modal-scroll-area">
+                        <div class="modal-body">
+                            <input type="hidden" id="provider-id">
+                            <div class="form-group">
+                                <label>Provider Designation</label>
+                                <input type="text" id="provider-name" required placeholder="e.g., OpenAI GPT-4">
+                                </div>
+                                <div class="form-group">
+                                <label>Secure Access Key (API Key)</label>
+                                <input type="password" id="provider-apikey" placeholder="sk-... (Leave empty if none)">
+                                </div>
+                                <div class="form-group">
+                                <label>Neural Endpoint (API URL)</label>
+                                <input type="text" id="provider-endpoint" required placeholder="https://api.openai.com/v1">
+                                <p class="hint">Must be OpenAI-compatible API protocol.</p>
+                                </div>
+                                <div class="form-group">
+                                <label>Core Model Identifier</label>
+                                <input type="text" id="provider-model" required placeholder="gpt-4o">
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button id="save-provider-btn" class="btn btn-primary btn-full btn-pixel">Save Provider</button>
+                        <button id="save-provider-btn" class="btn btn-primary btn-full btn-pixel">Establish Link</button>
                     </div>
                 </div>
             </div>

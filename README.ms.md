@@ -101,7 +101,7 @@ java -version
 
 ### 3. Buka Papan Pemuka
 Buka pelayar web anda dan pergi ke:
-[http://localhost:8080](http://localhost:8080)
+[http://localhost:8081](http://localhost:8081)
 
 *(Tekan `Ctrl+C` di terminal untuk berhenti)*
 

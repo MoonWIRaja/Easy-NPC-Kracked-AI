@@ -18,12 +18,12 @@ public class TestWebServer {
         // Create config with test settings
         ModConfig config = new ModConfig();
         config.getWebServer().setEnabled(true);
-        config.getWebServer().setPort(8080);
+        config.getWebServer().setPort(8081);
         config.getWebServer().setIp("0.0.0.0");
 
         System.out.println("Test configuration loaded:");
         System.out.println("  - Web Server: enabled");
-        System.out.println("  - Port: 8080");
+        System.out.println("  - Port: 8081");
         System.out.println("  - Bind IP: 0.0.0.0");
         System.out.println();
 
@@ -34,7 +34,7 @@ public class TestWebServer {
         System.out.println();
         System.out.println("========================================");
         System.out.println("  Web server is running!");
-        System.out.println("  Open your browser to: http://localhost:8080");
+        System.out.println("  Open your browser to: http://localhost:8081");
         System.out.println("========================================");
         System.out.println();
         System.out.println("Press Ctrl+C to stop the server.");
