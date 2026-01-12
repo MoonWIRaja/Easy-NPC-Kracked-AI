@@ -371,6 +371,21 @@ textarea {
     /* Slight roundness for premium feel */
 }
 
+.btn-danger {
+    background: rgba(255, 46, 99, 0.1);
+    color: #ff2e63;
+    border: 1px solid #ff2e63;
+    padding: 0.8rem 1.5rem;
+    font-size: 0.8rem;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background: #ff2e63;
+    color: white;
+    box-shadow: 0 0 15px rgba(255, 46, 99, 0.4);
+}
 select option {
     background-color: var(--bg-sidebar);
     color: var(--text-main);

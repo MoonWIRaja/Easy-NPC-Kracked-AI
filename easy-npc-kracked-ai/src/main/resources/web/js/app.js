@@ -72,6 +72,9 @@ function initEventListeners() {
 
     // NPC Modal
     document.getElementById('save-npc-btn').addEventListener('click', saveNPC);
+    document.getElementById('delete-npc-btn').addEventListener('click', () => {
+        if (currentNPC) deleteNPC(currentNPC.entityUuid);
+    });
 
     // Trait sliders and generic range displays
     document.querySelectorAll('input[type="range"]').forEach(slider => {
@@ -349,6 +352,29 @@ async function saveNPC() {
     } catch (error) {
         console.error('Failed to save NPC:', error);
         showToast('Matrix synchronization error', 'error');
+    }
+}
+
+// Delete NPC
+async function deleteNPC(uuid) {
+    if (!confirm('Are you sure you want to permanently delete this NPC profile from the database? This cannot be undone.')) return;
+
+    try {
+        const response = await apiCall(`/npcs/${uuid}`, {
+            method: 'DELETE'
+        });
+
+        if (response.ok) {
+            showToast('NPC profile deleted from Matrix', 'success');
+            hideModal('npc-modal');
+            loadNPCs();
+        } else {
+            const error = await response.json();
+            showToast(error.error || 'Deletion failed', 'error');
+        }
+    } catch (error) {
+        console.error('Failed to delete NPC:', error);
+        showToast('System execution error', 'error');
     }
 }
 

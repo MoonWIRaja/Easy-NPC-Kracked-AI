@@ -107,7 +107,15 @@ public class NPCManager {
     private void onNPCUnloaded(Entity entity) {
         UUID uuid = entity.getUuid();
 
-        LOGGER.debug("[Easy NPC kracked AI] Easy NPC unloaded: {}", uuid);
+        // Check if the entity is being removed permanently (killed or discarded)
+        // If it's just unloading (unloaded to chunk), we keep the profile
+        Entity.RemovalReason reason = entity.getRemovalReason();
+        if (reason != null && (reason == Entity.RemovalReason.KILLED || reason == Entity.RemovalReason.DISCARDED)) {
+            LOGGER.info("[Easy NPC kracked AI] Easy NPC permanently removed ({}): {}", reason, uuid);
+            registry.remove(uuid);
+        } else {
+            LOGGER.debug("[Easy NPC kracked AI] Easy NPC unloaded: {}", uuid);
+        }
 
         AINpcConnectorMod.getAIController().ifPresent(controller -> {
             controller.onNPCUnloaded(entity);
