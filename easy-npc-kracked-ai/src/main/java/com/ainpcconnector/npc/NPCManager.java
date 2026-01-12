@@ -126,11 +126,23 @@ public class NPCManager {
      * Called every server tick for NPC behavior processing.
      */
     private void onServerTick(net.minecraft.server.MinecraftServer server) {
+        // Collect all Easy NPC entities currently loaded across all worlds to avoid
+        // crashing version-sensitive getEntity(UUID) calls
+        java.util.Map<UUID, Entity> entityMap = new java.util.HashMap<>();
+        for (ServerWorld world : server.getWorlds()) {
+            for (Entity entity : world.iterateEntities()) {
+                if (isEasyNPC(entity)) {
+                    entityMap.put(entity.getUuid(), entity);
+                }
+            }
+        }
+
         // Process AI behavior for all enabled NPCs
         for (NPCProfile profile : registry.getAllProfiles()) {
             if (profile.isAiEnabled() && profile.getStatus() == NPCProfile.NPCStatus.IDLE) {
-                // Find the entity in the world
-                Entity entity = findEntity(server, profile.getEntityUuid());
+                // Find the entity in our pre-collected map
+                Entity entity = entityMap.get(profile.getEntityUuid());
+
                 if (entity != null && entity.isAlive()) {
                     // Update position using stable coordinate access
                     profile.setLastKnownPosition(
@@ -146,13 +158,15 @@ public class NPCManager {
     }
 
     /**
-     * Find an entity by UUID in all loaded worlds.
+     * Find an entity by UUID. (Deprecated/Internal use only - prefer pre-collected
+     * map)
      */
     private Entity findEntity(net.minecraft.server.MinecraftServer server, UUID uuid) {
         for (net.minecraft.server.world.ServerWorld world : server.getWorlds()) {
-            Entity foundEntity = world.getEntity(uuid);
-            if (foundEntity != null) {
-                return foundEntity;
+            for (Entity entity : world.iterateEntities()) {
+                if (entity.getUuid().equals(uuid)) {
+                    return entity;
+                }
             }
         }
         return null;
