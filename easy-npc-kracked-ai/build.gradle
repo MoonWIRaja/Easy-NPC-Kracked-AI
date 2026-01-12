@@ -33,9 +33,17 @@ dependencies {
     // Voice Chat API (mod implementation)
     modImplementation "de.maxhenkel.voicechat:voicechat-api:${project.voicechat_api_version}"
 
+    // Kotlin Standard Library (required by Javalin)
+    implementation('org.jetbrains.kotlin:kotlin-stdlib:1.9.25')
+    include('org.jetbrains.kotlin:kotlin-stdlib:1.9.25')
+
     // Javalin Web Server - Using 5.x for better Jetty compatibility
     implementation('io.javalin:javalin:5.6.5')
     include('io.javalin:javalin:5.6.5')
+
+    // Kotlin Reflection (required by Javalin)
+    implementation('org.jetbrains.kotlin:kotlin-reflect:1.9.25')
+    include('org.jetbrains.kotlin:kotlin-reflect:1.9.25')
 
     implementation('org.slf4j:slf4j-simple:2.0.16')
     include('org.slf4j:slf4j-simple:2.0.16')
